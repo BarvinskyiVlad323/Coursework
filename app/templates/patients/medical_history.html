@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Новий медичний запис для {{ patient.first_name }} {{ patient.last_name }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.diagnosis.label(class="form-label") }}
+                        {{ form.diagnosis(class="form-control") }}
+                        {% for error in form.diagnosis.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.treatment.label(class="form-label") }}
+                        {{ form.treatment(class="form-control", rows=4) }}
+                        {% for error in form.treatment.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.prescription.label(class="form-label") }}
+                        {{ form.prescription(class="form-control", rows=3) }}
+                        {% for error in form.prescription.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.notes.label(class="form-label") }}
+                        {{ form.notes(class="form-control", rows=3) }}
+                        {% for error in form.notes.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.next_appointment.label(class="form-label") }}
+                        {{ form.next_appointment(class="form-control", type="date") }}
+                        {% for error in form.next_appointment.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <a href="{{ url_for('patients.patient_detail', id=patient.id) }}" class="btn btn-secondary">Скасувати</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

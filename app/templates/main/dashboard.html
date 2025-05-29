@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <h2>Панель керування</h2>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Управління пацієнтами</h5>
+                <p class="card-text">Додавайте та керуйте записами пацієнтів у системі.</p>
+                <a href="{{ url_for('patients.new_patient') }}" class="btn btn-primary">Додати нового пацієнта</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Записи пацієнтів</h5>
+                <p class="card-text">Переглядайте та шукайте існуючі записи пацієнтів.</p>
+                <a href="{{ url_for('patients.patient_list') }}" class="btn btn-primary">Переглянути пацієнтів</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
