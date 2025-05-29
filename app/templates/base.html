@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="uk" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Система управління пацієнтами</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Світла тема */
+            --light-bg: #f5f5dc;
+            --light-nav: #f0c040;
+            --light-card: #fff8e6;
+            --light-border: #e6e6ce;
+            --light-text: #000000;
+            --light-primary: #e6b800;
+            --light-primary-hover: #cc9900;
+            --light-primary-border: #b38600;
+            
+            /* Темна тема */
+            --dark-bg: #1a1a1a;
+            --dark-nav: #1e3d59;
+            --dark-card: #2d4b6e;
+            --dark-border: #3d5a80;
+            --dark-text: #ffffff;
+            --dark-primary: #4d94ff;
+            --dark-primary-hover: #3385ff;
+            --dark-primary-border: #1a75ff;
+        }
+
+        [data-bs-theme=light] {
+            --theme-bg: var(--light-bg);
+            --theme-nav: var(--light-nav);
+            --theme-card: var(--light-card);
+            --theme-border: var(--light-border);
+            --theme-text: var(--light-text);
+            --theme-primary: var(--light-primary);
+            --theme-primary-hover: var(--light-primary-hover);
+            --theme-primary-border: var(--light-primary-border);
+        }
+
+        [data-bs-theme=dark] {
+            --theme-bg: var(--dark-bg);
+            --theme-nav: var(--dark-nav);
+            --theme-card: var(--dark-card);
+            --theme-border: var(--dark-border);
+            --theme-text: var(--dark-text);
+            --theme-primary: var(--dark-primary);
+            --theme-primary-hover: var(--dark-primary-hover);
+            --theme-primary-border: var(--dark-primary-border);
+        }
+
+        body {
+            background-color: var(--theme-bg) !important;
+            font-family: 'Ubuntu', sans-serif !important;
+            color: var(--theme-text) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: 'Ubuntu', sans-serif !important;
+            font-weight: 500 !important;
+            color: var(--theme-text) !important;
+        }
+
+        .navbar {
+            background-color: var(--theme-nav) !important;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: var(--theme-text) !important;
+            font-weight: 400 !important;
+            opacity: 0.7;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            opacity: 1;
+        }
+
+        .navbar-dark .navbar-brand {
+            color: var(--theme-text) !important;
+            font-weight: 700 !important;
+        }
+
+        .btn {
+            font-weight: 500 !important;
+        }
+
+        .btn-primary {
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary-border) !important;
+            color: var(--theme-text) !important;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--theme-primary-hover) !important;
+            border-color: var(--theme-primary-border) !important;
+        }
+
+        .btn-danger {
+            background-color: #808080 !important;
+            border-color: #696969 !important;
+            color: #ffffff !important;
+        }
+
+        .btn-danger:hover {
+            background-color: #696969 !important;
+            border-color: #595959 !important;
+        }
+
+        .card {
+            background-color: var(--theme-card) !important;
+            border-color: var(--theme-border) !important;
+        }
+
+        .card-header {
+            background-color: var(--theme-nav) !important;
+            border-bottom: 1px solid var(--theme-border) !important;
+            color: var(--theme-text) !important;
+        }
+
+        .card-title {
+            font-weight: 500 !important;
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary-border) !important;
+            color: var(--theme-text) !important;
+        }
+
+        .page-link {
+            color: var(--theme-primary) !important;
+            background-color: var(--theme-card) !important;
+            border-color: var(--theme-border) !important;
+        }
+
+        .page-link:hover {
+            color: var(--theme-primary-hover) !important;
+            background-color: var(--theme-nav) !important;
+        }
+
+        .table {
+            color: var(--theme-text) !important;
+        }
+
+        .table-light {
+            background-color: var(--theme-card) !important;
+            color: var(--theme-text) !important;
+        }
+
+        .list-group-item {
+            background-color: var(--theme-card) !important;
+            border-color: var(--theme-border) !important;
+            color: var(--theme-text) !important;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--theme-card) !important;
+            border-color: var(--theme-border) !important;
+            color: var(--theme-text) !important;
+            font-family: 'Ubuntu', sans-serif !important;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--theme-card) !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 0.25rem rgba(77, 148, 255, 0.25) !important;
+        }
+
+        .modal-content {
+            background-color: var(--theme-bg) !important;
+            color: var(--theme-text) !important;
+        }
+
+        .modal-header {
+            background-color: var(--theme-card) !important;
+            border-bottom-color: var(--theme-border) !important;
+        }
+
+        .modal-title {
+            font-weight: 500 !important;
+        }
+
+        .modal-footer {
+            border-top-color: var(--theme-border) !important;
+        }
+
+        .alert {
+            background-color: var(--theme-card) !important;
+            border-color: var(--theme-border) !important;
+            color: var(--theme-text) !important;
+        }
+
+        .theme-switch {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--theme-text);
+            background-color: var(--theme-card);
+            border: 1px solid var(--theme-border);
+        }
+
+        .theme-switch:hover {
+            opacity: 0.8;
+        }
+
+        [data-bs-theme=dark] .theme-switch .bi-sun {
+            display: inline-block;
+        }
+
+        [data-bs-theme=dark] .theme-switch .bi-moon {
+            display: none;
+        }
+
+        [data-bs-theme=light] .theme-switch .bi-sun {
+            display: none;
+        }
+
+        [data-bs-theme=light] .theme-switch .bi-moon {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Управління пацієнтами</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.dashboard') }}">Панель керування</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('patients.patient_list') }}">Пацієнти</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="theme-switch" onclick="toggleTheme()">
+                            <i class="bi bi-sun"></i>
+                            <i class="bi bi-moon"></i>
+                        </button>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">Вийти</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Увійти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">Зареєструватися</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Встановлюємо тему при завантаженні
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        });
+    </script>
+</body>
+</html> 

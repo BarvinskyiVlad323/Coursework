@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Деталі пацієнта</h2>
+            <div>
+                <a href="{{ url_for('patients.edit_patient', id=patient.id) }}" class="btn btn-primary">Редагувати пацієнта</a>
+                <a href="{{ url_for('patients.new_medical_history', id=patient.id) }}" class="btn btn-success">Додати медичний запис</a>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Видалити пацієнта
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Підтвердження видалення</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Ви впевнені, що хочете видалити пацієнта {{ patient.first_name }} {{ patient.last_name }}? Ця дія незворотна.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <form action="{{ url_for('patients.delete_patient', id=patient.id) }}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Видалити</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Особиста інформація</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Ім'я</dt>
+                    <dd class="col-sm-8">{{ patient.first_name }} {{ patient.last_name }}</dd>
+                    
+                    <dt class="col-sm-4">Дата народження</dt>
+                    <dd class="col-sm-8">{{ patient.date_of_birth.strftime('%Y-%m-%d') }}</dd>
+                    
+                    <dt class="col-sm-4">Стать</dt>
+                    <dd class="col-sm-8">{{ patient.gender }}</dd>
+                    
+                    <dt class="col-sm-4">Контакт</dt>
+                    <dd class="col-sm-8">{{ patient.contact_number }}</dd>
+                    
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">{{ patient.email or 'Не вказано' }}</dd>
+                    
+                    <dt class="col-sm-4">Адреса</dt>
+                    <dd class="col-sm-8">{{ patient.address }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Історія хвороби</h5>
+            </div>
+            <div class="card-body">
+                {% if patient.medical_history %}
+                <div class="list-group">
+                    {% for history in patient.medical_history %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ history.diagnosis }}</h6>
+                            <small>{{ history.visit_date.strftime('%Y-%m-%d') }}</small>
+                        </div>
+                        <p class="mb-1">Лікування: {{ history.treatment }}</p>
+                        {% if history.prescription %}
+                        <small>Призначення: {{ history.prescription }}</small>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">Записів історії хвороби не знайдено.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

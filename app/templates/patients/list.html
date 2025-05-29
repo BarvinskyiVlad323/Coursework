@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Список пацієнтів</h2>
+    <a href="{{ url_for('patients.new_patient') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Додати нового пацієнта
+    </a>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Підтвердження видалення</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Ви впевнені, що хочете видалити цього пацієнта? Ця дія незворотна.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <form id="deleteForm" action="" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Видалити</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Пацієнти</h5>
+    </div>
+    <div class="card-body">
+        {% if patients.items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ім'я</th>
+                        <th>Дата народження</th>
+                        <th>Контакт</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients.items %}
+                    <tr>
+                        <td>{{ patient.last_name }}, {{ patient.first_name }}</td>
+                        <td>{{ patient.date_of_birth.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ patient.contact_number }}</td>
+                        <td>
+                            <a href="{{ url_for('patients.patient_detail', id=patient.id) }}" class="btn btn-sm btn-primary">Перегляд</a>
+                            <a href="{{ url_for('patients.edit_patient', id=patient.id) }}" class="btn btn-sm btn-primary">Редагувати</a>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="prepareDelete('{{ url_for('patients.delete_patient', id=patient.id) }}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                Видалити
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted my-4">Пацієнтів не знайдено. Додайте першого пацієнта, щоб розпочати.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if patients.items %}
+<nav aria-label="Навігація сторінками" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if patients.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('patients.patient_list', page=patients.prev_num) }}">Попередня</a>
+        </li>
+        {% endif %}
+        
+        {% for page_num in patients.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
+            {% if page_num %}
+                {% if patients.page == page_num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ page_num }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('patients.patient_list', page=page_num) }}">{{ page_num }}</a>
+                </li>
+                {% endif %}
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if patients.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('patients.patient_list', page=patients.next_num) }}">Наступна</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+<script>
+function prepareDelete(url) {
+    document.getElementById('deleteForm').action = url;
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=wsgi.py
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/patient_db
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        sleep 5 &&
+        flask db init || true &&
+        flask db stamp head || true &&
+        flask db migrate -m 'initial migration' || true &&
+        flask db upgrade &&
+        flask run --host=0.0.0.0
+      "
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=patient_db
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge 
